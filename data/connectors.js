@@ -28,9 +28,11 @@ db.sync({ force: true }).then(() => {
             firstName: casual.first_name,
             lastName: casual.last_name,
         }).then((author) => {
-            return author.createPost({
-                title: `A post by ${author.firstName}`,
-                text: casual.sentences(3),
+            _.times(3, () => {
+                return author.createPost({
+                    title: `A post by ${author.firstName} - ` + casual.title,
+                    text: casual.sentences(3),
+                });
             });
         });
     });

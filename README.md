@@ -11,6 +11,7 @@ An Apollo GraphQL Server connecting to multiple backends: MongoDB, SQL, and REST
 7. Using REST services from GraphQL
 
 TODO:
+
 8. Setting up performance tracing
 9. Setting up result caching
 

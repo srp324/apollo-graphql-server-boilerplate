@@ -1,9 +1,11 @@
-import Sequelize from 'sequelize';
+import Mongoose from 'mongoose'; //MongoDB Connector
+import Sequelize from 'sequelize'; //SQLLite Connector
+import fetch from 'node-fetch'; //REST API Endpoints Connector
 import casual from 'casual';
-import Mongoose from 'mongoose';
 import _ from 'lodash';
 
-//MongoDB =========================================================
+
+//MongoDB (Mongoose) ==============================================
 Mongoose.Promise = global.Promise;
 
 const mongo = Mongoose.connect('mongodb://localhost/views', {
@@ -18,7 +20,7 @@ const ViewSchema = Mongoose.Schema({
 const View = Mongoose.model('views', ViewSchema);
 //=================================================================
 
-//SQLLite =========================================================
+//SQLLite (Sequelize) =============================================
 const db = new Sequelize('blog', null, null, {
     dialect: 'sqlite',
     storage: './blog.sqlite',
@@ -37,7 +39,7 @@ AuthorModel.hasMany(PostModel);
 PostModel.belongsTo(AuthorModel);
 //=================================================================
 
-// create mock data with a seed, so we always get the same randoms
+// Populate SQLLite and MongoDB Databases with the same random mock data created with casual
 casual.seed(123);
 db.sync({ force: true }).then(() => {
     _.times(10, () => {
@@ -64,5 +66,16 @@ db.sync({ force: true }).then(() => {
 const Author = db.models.author;
 const Post = db.models.post;
 
+//REST API Endpoint (node-fetch) ==================================
+const FortuneCookie = {
+    getOne() {
+        return fetch('http://fortunecookieapi.herokuapp.com/v1/cookie')
+            .then(res => res.json())
+            .then(res => {
+                return res[0].fortune.message;
+            });
+    },
+};
+//=================================================================
 
-export { Author, Post, View };
+export { Author, Post, View, FortuneCookie };
